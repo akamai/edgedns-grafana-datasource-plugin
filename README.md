@@ -1,0 +1,1 @@
+# edgedns-grafana-datasource-plugin
