@@ -168,8 +168,16 @@ func (td *AkamaiEdgeDnsDatasource) query(ctx context.Context, query backend.Data
 	log.DefaultLogger.Info("query", "query.TimeRange.From", query.TimeRange.From)
 	log.DefaultLogger.Info("query", "query.TimeRange.To", query.TimeRange.To)
 	log.DefaultLogger.Info("query", "maxDataPoints", dqj.MaxDataPoints)
+	log.DefaultLogger.Info("query", "SelectedReport", dqj.SelectedReport.Label)
 	log.DefaultLogger.Info("query", "zoneNames", dqj.ZoneNames)
 	log.DefaultLogger.Info("query", "metricName", dqj.MetricName)
+
+	// If SelectedReport or ZoneNames are empty then ignore the query
+	if len(dqj.SelectedReport.Label) == 0 || len(dqj.ZoneNames) == 0 {
+        	response.Error = errors.New("Select a report and enter zone names")
+                return response
+
+	}
 
 	// 'interval' and fixed-up 'from' and 'to' times are needed to make the OPEN API POST URL
 	interval := calculateInterval(query.TimeRange.From, query.TimeRange.To, dqj.MaxDataPoints)

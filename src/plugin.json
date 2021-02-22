@@ -1,13 +1,13 @@
 {
   "type": "datasource",
-  "name": "akamai-edgedns-datasource-plugin",
-  "id": "akamai-edgedns-datasource-plugin",
+  "name": "Akamai Edge DNS Datasource",
+  "id": "akamai-edgedns-datasource",
   "metrics": true,
   "backend": true,
   "alerting": true,
   "executable": "gpx_akamai-edgedns-datasource-plugin",
   "info": {
-    "description": "Datasource for Akamai EdgeDns metrics",
+    "description": "Grafana datasource for Akamai Edge DNS metrics",
     "author": {
       "name": "Akamai Technologies"
     },
@@ -18,7 +18,11 @@
     },
     "links": [
       {
-        "name": "Project site",
+        "name": "Website",
+        "url": "https://www.akamai.com"
+      },
+      {
+        "name": "GitHub",
         "url": "https://github.com/akamai/edgedns-grafana-datasource-plugin"
       },
       {

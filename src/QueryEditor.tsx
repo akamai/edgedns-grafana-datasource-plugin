@@ -36,24 +36,27 @@ export class QueryEditor extends PureComponent<Props> {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, selectedReport: item });
     console.log('selectedReport: ', item);
-    // executes the query
-    onRunQuery();
+    if (item && query.zoneNames) {
+      onRunQuery();
+    }
   };
 
   onZoneNamesChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, zoneNames: event.target.value });
     console.log('zoneNames: ' + event.target.value);
-    // executes the query
-    onRunQuery();
+    if (event.target.value && query.selectedReport) {
+      onRunQuery();
+    }
   };
 
   onMetricNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, metricName: event.target.value });
     console.log('metricName: ' + event.target.value);
-    // executes the query
-    onRunQuery();
+    if (query.zoneNames && query.selectedReport) {
+      onRunQuery();
+    }
   };
 
   render() {
@@ -76,6 +79,7 @@ export class QueryEditor extends PureComponent<Props> {
             value={zoneNames || ''}
             labelWidth={4}
             inputWidth={24}
+            placeholder="Enter zone names"
             onChange={this.onZoneNamesChange}
             label="Zones"
             tooltip="Comma-separted zone names. Metrics for listed zones are added together."
@@ -85,7 +89,7 @@ export class QueryEditor extends PureComponent<Props> {
             labelWidth={8}
             inputWidth={20}
             onChange={this.onMetricNameChange}
-            label="MetricName"
+            label="Metric Name"
             tooltip="Graphed metric's name. If empty, a name is generated."
           />
         </div>
