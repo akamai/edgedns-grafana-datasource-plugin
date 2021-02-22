@@ -24,6 +24,7 @@ coverage
 artifacts/
 work/
 ci/
+.circleci/
 e2e-results/
 
 # Editor
