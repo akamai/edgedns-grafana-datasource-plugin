@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Akamai Technologies
+ * Copyright 2021 Akamai Technologies, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -227,8 +227,13 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 	// Error response. The datasource cannot reach the OPEN API.
 	if apiresp.StatusCode != 200 {
 		var rspDto OpenApiErrorRspDto
-		json.NewDecoder(apiresp.Body).Decode(&rspDto)
-		msg := "Datasource failed: " + rspDto.Errors[0].Title
+		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
+		msg := "Datasource failed: "
+		if err != nil {  // A JSON decode error. Not the expected body. Use the response status for the error message.
+                        msg += apiresp.Status
+                } else {
+                        msg += rspDto.Errors[0].Title // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
+                }
 		log.DefaultLogger.Error("edgeDnsOpenApiTest", "msg", msg)
 		return msg, backend.HealthStatusError
 	}
@@ -238,11 +243,11 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 }
 
 // Get data needed to populate the graph.
-func edgeDnsOpenApiPost(zoneNamesList []string, fromRounded time.Time, toRounded time.Time, interval Interval,
+func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounded time.Time, interval Interval,
 	clientSecret string, host string, accessToken string, clientToken string) (*EdgeDnsTrafficByTimeRspDto, error) {
 	reqDto := NewEdgeDnsTrafficByTimeReqDto(zoneNamesList)     // the POST body
 	openurl := createOpenUrl(fromRounded, toRounded, interval) // the POST URL
-	log.DefaultLogger.Info("edgeDnsOpenApiPost", "openurl", openurl)
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "openurl", openurl)
 
 	// POST to the OPEN API
 	postBodyJson, err := json.Marshal(reqDto)
@@ -263,14 +268,18 @@ func edgeDnsOpenApiPost(zoneNamesList []string, fromRounded time.Time, toRounded
 		return nil, err
 	}
 	defer apiresp.Body.Close()
-	log.DefaultLogger.Info("edgeDnsOpenApiPost", "Status", apiresp.Status)
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "Status", apiresp.Status)
 
 	// OPEN API error response
 	if apiresp.StatusCode != 200 {
-		var rspDto OpenApiErrorRspDto // the POST response body
-		json.NewDecoder(apiresp.Body).Decode(&rspDto)
-		err := errors.New(rspDto.Errors[0].Title) // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
-		log.DefaultLogger.Info("edgeDnsOpenApiPost", "err", err)
+		var rspDto OpenApiErrorRspDto // the expected "error" response body
+		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
+		if err != nil {  // A JSON decode error. Not the expected body. Use the response status for the error message.
+			err = errors.New(apiresp.Status)
+		} else {
+			err = errors.New(rspDto.Errors[0].Title) // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
+		}
+		log.DefaultLogger.Info("edgeDnsOpenApiQuery", "err", err)
 		return nil, err
 	}
 

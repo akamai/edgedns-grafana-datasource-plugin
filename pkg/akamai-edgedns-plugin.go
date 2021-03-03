@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Akamai Technologies
+ * Copyright 2021 Akamai Technologies, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -194,8 +194,8 @@ func (td *AkamaiEdgeDnsDatasource) query(ctx context.Context, query backend.Data
 		return response
 	}
 
-	// The OPEN API POST returns the data to graph.
-	openApiRspDto, err := edgeDnsOpenApiPost(zoneNamesList, fromRounded, toRounded, interval, dss.ClientSecret, dss.Host, dss.AccessToken, dss.ClientToken)
+	// The OPEN API returns the data to graph.
+	openApiRspDto, err := edgeDnsOpenApiQuery(zoneNamesList, fromRounded, toRounded, interval, dss.ClientSecret, dss.Host, dss.AccessToken, dss.ClientToken)
 	if err != nil {
 		response.Error = err
 		return response
