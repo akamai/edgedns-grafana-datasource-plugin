@@ -7,6 +7,7 @@ Use the Akamai Edge DNS datasource plugin to observe Edge DNS metrics.
 * Grafana 7.0 or newer.
 * An Akamai API client with authorization to use the [Edge DNS Traffic By Time API](https://developer.akamai.com/api/core_features/reporting/authoritative-dns-traffic-by-time.html). 
 [Authenticate With EdgeGrid](https://developer.akamai.com/getting-started/edgegrid) provides information to generate the required credentials. 
+To enable the "Edge DNS Traffic By Time API", choose the API service named "Reporting API", and set the access level to READ-WRITE.
 
 ## Installation
 
@@ -26,19 +27,19 @@ grafana-cli plugins install akamai-edgedns-datasource
 
 In the datasource configuration panel, enter your Akamai credentials.
 
-![Data Source](https://raw.githubusercontent.com/akamai/edgedns-grafana-datasource-plugin/develop/static/data-source-config.png)
+![Data Source](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/data-source-config.png)
 
 Create a new dashboard and add a panel.
 
 Select a report to graph.
 
-![Report Selection](https://raw.githubusercontent.com/akamai/edgedns-grafana-datasource-plugin/develop/static/report-selection.png)
+![Report Selection](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/report-selection.png)
 
 Enter one or more zone names, separated by commas.  If more than one zone is entered then the selected metric (e.g. hits) for all zones are added together and graphed.
 
-![Zones](https://raw.githubusercontent.com/akamai/edgedns-grafana-datasource-plugin/develop/static/zones-config.png)
+![Zones](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/zones-config.png)
 
 Metric name is optional. If empty then a metric name is automatically generated.
 
-![Metric Name](https://raw.githubusercontent.com/akamai/edgedns-grafana-datasource-plugin/develop/static/metric-name-config.png)
+![Metric Name](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/metric-name-config.png)
 

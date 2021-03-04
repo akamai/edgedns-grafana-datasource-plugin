@@ -174,8 +174,8 @@ func (td *AkamaiEdgeDnsDatasource) query(ctx context.Context, query backend.Data
 
 	// If SelectedReport or ZoneNames are empty then ignore the query
 	if len(dqj.SelectedReport.Label) == 0 || len(dqj.ZoneNames) == 0 {
-        	response.Error = errors.New("Select a report and enter zone names")
-                return response
+		response.Error = errors.New("Select a report and enter zone names")
+		return response
 
 	}
 

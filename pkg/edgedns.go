@@ -229,11 +229,11 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 		var rspDto OpenApiErrorRspDto
 		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
 		msg := "Datasource failed: "
-		if err != nil {  // A JSON decode error. Not the expected body. Use the response status for the error message.
-                        msg += apiresp.Status
-                } else {
-                        msg += rspDto.Errors[0].Title // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
-                }
+		if err != nil { // A JSON decode error. Not the expected body. Use the response status for the error message.
+			msg += apiresp.Status
+		} else {
+			msg += rspDto.Errors[0].Title // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
+		}
 		log.DefaultLogger.Error("edgeDnsOpenApiTest", "msg", msg)
 		return msg, backend.HealthStatusError
 	}
@@ -274,7 +274,7 @@ func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounde
 	if apiresp.StatusCode != 200 {
 		var rspDto OpenApiErrorRspDto // the expected "error" response body
 		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
-		if err != nil {  // A JSON decode error. Not the expected body. Use the response status for the error message.
+		if err != nil { // A JSON decode error. Not the expected body. Use the response status for the error message.
 			err = errors.New(apiresp.Status)
 		} else {
 			err = errors.New(rspDto.Errors[0].Title) // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
