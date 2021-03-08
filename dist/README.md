@@ -6,8 +6,7 @@ Use the Akamai Edge DNS datasource plugin to observe Edge DNS metrics.
 
 * Grafana 7.0 or newer.
 * An Akamai API client with authorization to use the [Edge DNS Traffic By Time API](https://developer.akamai.com/api/core_features/reporting/authoritative-dns-traffic-by-time.html). 
-[Authenticate With EdgeGrid](https://developer.akamai.com/getting-started/edgegrid) provides information to generate the required credentials. 
-To enable the "Edge DNS Traffic By Time API", choose the API service named "Reporting API", and set the access level to READ-WRITE.
+* [Authenticate With EdgeGrid](https://developer.akamai.com/getting-started/edgegrid) provides information to generate the required credentials. Choose the API service named "Reporting API", and set the access level to READ-WRITE.
 
 ## Installation
 

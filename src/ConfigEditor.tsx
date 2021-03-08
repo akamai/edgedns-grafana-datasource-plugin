@@ -31,7 +31,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options.jsonData,
       clientSecret: event.target.value,
     };
-    console.log('clientSecret: ' + event.target.value);
+    // console.log('clientSecret: ' + event.target.value);
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -41,7 +41,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options.jsonData,
       host: event.target.value,
     };
-    console.log('host: ' + event.target.value);
+    // console.log('host: ' + event.target.value);
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -51,7 +51,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options.jsonData,
       accessToken: event.target.value,
     };
-    console.log('accessToken: ' + event.target.value);
+    // console.log('accessToken: ' + event.target.value);
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -61,7 +61,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options.jsonData,
       clientToken: event.target.value,
     };
-    console.log('clientToken: ' + event.target.value);
+    // console.log('clientToken: ' + event.target.value);
     onOptionsChange({ ...options, jsonData });
   };
 

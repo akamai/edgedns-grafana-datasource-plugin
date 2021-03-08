@@ -1,7 +1,7 @@
 {
   "name": "akamai-edgedns-datasource-plugin",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Grafana datasource for Akamai Edge DNS metrics",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
