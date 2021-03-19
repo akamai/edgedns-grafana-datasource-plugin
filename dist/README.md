@@ -84,4 +84,3 @@ Enter one or more zone names, separated by commas.  If more than one zone is ent
 Metric name is optional. If empty then a metric name is automatically generated.
 
 ![Metric Name](/static/metric-name-config.png)
-
