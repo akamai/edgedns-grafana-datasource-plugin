@@ -69,19 +69,19 @@ describes how to restart Grafana for each operating system.
 
 In the datasource configuration panel, enter your Akamai credentials.
 
-![Data Source](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/data-source-config.png)
+![Data Source](/static/data-source-config.png)
 
 Create a new dashboard and add a panel.
 
 Select a report to graph.
 
-![Report Selection](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/report-selection.png)
+![Report Selection](/static/report-selection.png)
 
 Enter one or more zone names, separated by commas.  If more than one zone is entered then the selected metric (e.g. hits) for all zones are added together and graphed.
 
-![Zones](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/zones-config.png)
+![Zones](/static/zones-config.png)
 
 Metric name is optional. If empty then a metric name is automatically generated.
 
-![Metric Name](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/develop/static/metric-name-config.png)
+![Metric Name](/static/metric-name-config.png)
 
