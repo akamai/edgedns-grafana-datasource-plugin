@@ -22,6 +22,7 @@ under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v1.0.0"
 ### Linux OSs (Debian, Ubuntu, CentOS, Fedora, OpenSuse, Red Hat)
 
 Configuration file: /etc/grafana/grafana.ini  
+
 Plugin directory: /var/lib/grafana/plugins  
 Log directory: /var/log/grafana/
 
@@ -41,11 +42,13 @@ From the unzipped archive, copy one of (as appropriate for your hardware):
 * gpx_akamai-edgedns-datasource-plugin_linux_amd64
 * gpx_akamai-edgedns-datasource-plugin_linux_arm
 * gpx_akamai-edgedns-datasource-plugin_linux_arm64  
+
 to /var/lib/grafana/plugins/edgedns-grafana-datasource
 
 ### Macintosh
 
 Configuration file: /usr/local/etc/grafana/grafana.ini  
+
 Plugin directory: /usr/local/var/lib/grafana/plugins  
 Log directory: /usr/local/var/log/grafana/
 
@@ -69,6 +72,7 @@ to /usr/local/var/lib/grafana/plugins/edgedns-grafana-datasource
 
 Grafana can be installed into any directory (install_dir).
 Configuration file: install_dir\conf  
+
 Plugin directory: install_dir\data\plugins  
 Log directory: install_dir\data\log
 
@@ -96,6 +100,7 @@ describes configuration for each operating system.
 * Using a text editor, open the configuration file (as described in [Configuration](https://grafana.com/docs/grafana/latest/administration/configuration/).
 
 * Under the [paths] section header, uncomment "plugins".
+
 * To the right of "plugins =", insert the complete path to the plugin directory.
 
 * Under the [plugins] section header, uncomment "allow_loading_unsigned_plugins".
@@ -122,19 +127,19 @@ Select Configuration (gear icon) -> Datasources -> Akamai Edge DNS Datasource
 
 In the datasource configuration panel, enter your Akamai credentials.
 
-![Data Source](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/master/static/data-source-config.png)
+![Data Source](/static/data-source-config.png)
 
 Create a new dashboard and add a panel.
 
 Select a report to graph.
 
-![Report Selection](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/master/static/report-selection.png)
+![Report Selection](/static/report-selection.png)
 
 Enter one or more zone names, separated by commas.  If more than one zone is entered then the selected metric (e.g. hits) for all zones are added together and graphed.
 
-![Zones](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/master/static/zones-config.png)
+![Zones](/static/zones-config.png)
 
 Metric name is optional. If empty then a metric name is automatically generated.
 
-![Metric Name](https://github.com/akamai/edgedns-grafana-datasource-plugin/blob/master/static/metric-name-config.png)
+![Metric Name](/static/metric-name-config.png)
 
