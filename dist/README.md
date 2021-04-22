@@ -58,6 +58,7 @@ under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v1.0.1"
 ### Linux OSs (Debian, Ubuntu, CentOS, Fedora, OpenSuse, Red Hat)
 
 Configuration file: /etc/grafana/grafana.ini  
+
 Plugin directory: /var/lib/grafana/plugins  
 Log directory: /var/log/grafana/
 

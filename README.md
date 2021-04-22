@@ -58,6 +58,7 @@ under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v1.0.1"
 ### Linux OSs (Debian, Ubuntu, CentOS, Fedora, OpenSuse, Red Hat)
 
 Configuration file: /etc/grafana/grafana.ini  
+
 Plugin directory: /var/lib/grafana/plugins  
 Log directory: /var/log/grafana/
 
@@ -86,6 +87,7 @@ to /var/lib/grafana/plugins/edgedns-grafana-datasource
 ### Macintosh
 
 Configuration file: /usr/local/etc/grafana/grafana.ini  
+
 Plugin directory: /usr/local/var/lib/grafana/plugins  
 Log directory: /usr/local/var/log/grafana/
 
@@ -111,6 +113,7 @@ to /usr/local/var/lib/grafana/plugins/edgedns-grafana-datasource
 
 Grafana can be installed into any directory (install_dir).
 Configuration file: install_dir\conf  
+
 Plugin directory: install_dir\data\plugins  
 Log directory: install_dir\data\log
 
