@@ -116,7 +116,9 @@ zip akamai-edgedns-datasource-2.0.0.zip akamai-edgedns-datasource/ -r
 '2.0.0' is an example. Use your current plugin version number.
 
 ## Release
-Navigate to https://github.com/akamai/edgedns-grafana-datasource-plugin
+
+Navigate to https://github.com/akamai/edgedns-grafana-datasource-plugin.
+
 Log in. (You'll need admin rights.)
 
 Follow the directions in [Managing releases in a repository](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).  
