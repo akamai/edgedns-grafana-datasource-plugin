@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { DataQuery, DataSourceJsonData, SelectableValue } from '@grafana/data';
+import { SelectableValue } from '@grafana/data';
+import type { DataQuery, DataSourceJsonData } from '@grafana/schema';
 
 export interface MyQuery extends DataQuery {
   selectedReport: SelectableValue<string>;
@@ -22,7 +23,12 @@ export interface MyQuery extends DataQuery {
   metricName?: string;
 }
 
-export const defaultQuery: Partial<MyQuery> = {};
+//export const defaultQuery: Partial<MyQuery> = {};
+
+export const defaultQuery: Partial<MyQuery> = {
+  selectedReport: { label: '', value: '' },
+};
+
 
 export interface MyDataSourceOptions extends DataSourceJsonData {
   clientSecret?: string;
