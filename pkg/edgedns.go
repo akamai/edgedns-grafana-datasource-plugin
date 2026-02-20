@@ -216,8 +216,8 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 	/*openurl := createOpenUrl(fromRounded, toRounded, interval) // The URL
 	log.DefaultLogger.Info("edgeDnsOpenApiHealthCheck", "openurl", openurl)*/
 
-	path := createOpenUrl(fromRounded, toRounded, interval)
-	openurl := fmt.Sprintf("https://%s%s", host, path)
+	openurl := createOpenUrl(fromRounded, toRounded, interval)
+	//openurl := fmt.Sprintf("https://%s%s", host, path)
 	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "fullUrl", openurl)
 
 	config := NewEdgegridConfig(clientSecret, host, accessToken, clientToken)
@@ -243,6 +243,7 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 		log.DefaultLogger.Error("OPEN API communication error", "err", err)
 		return err.Error(), backend.HealthStatusError
 	}
+	defer resp.Body.Close()
 
 	log.DefaultLogger.Info("edgeDnsOpenApiHead", "Status", resp.Status)
 
@@ -270,8 +271,8 @@ func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounde
 	reqDto := NewEdgeDnsTrafficByTimeReqDto(zoneNamesList) // the POST body
 	/*openurl := createOpenUrl(fromRounded, toRounded, interval) // the POST URL
 	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "openurl", openurl)*/
-	path := createOpenUrl(fromRounded, toRounded, interval)
-	openurl := fmt.Sprintf("https://%s%s", host, path)
+	openurl := createOpenUrl(fromRounded, toRounded, interval)
+	//openurl := fmt.Sprintf("https://%s%s", host, path)
 	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "fullUrl", openurl)
 
 	// POST to the OPEN API
@@ -283,7 +284,7 @@ func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounde
 	config := NewEdgegridConfig(clientSecret, host, accessToken, clientToken)
 	sess, err := session.New(
 		session.WithSigner(config),
-		session.WithHTTPTracing(true),
+		//session.WithHTTPTracing(true),
 	)
 	if err != nil {
 		log.DefaultLogger.Error("Error creating session", "err", err)
