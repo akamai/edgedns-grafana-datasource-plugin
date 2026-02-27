@@ -20,11 +20,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/client-v1"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/edgegrid"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/edgegrid"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/session"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 )
@@ -90,6 +91,13 @@ func limitTimeToOldestData(timeRounded time.Time, oldestDataTime time.Time) time
 
 // Adjust the start (from) and end (to) times
 func adjustQueryTimes(from time.Time, to time.Time, interval Interval) (time.Time, time.Time, error) {
+
+	if from.IsZero() || to.IsZero() {
+		err := errors.New("from or to time is not set (zero time)")
+		log.DefaultLogger.Warn("adjustQueryTimes", "from", from, "to", to, "err", err)
+		return time.Time{}, time.Time{}, err
+	}
+
 	fromRounded := roundupTimeForInterval(from, interval)
 	toRounded := roundupTimeForInterval(to, interval)
 
@@ -205,34 +213,49 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 
 	fromRounded := roundupTimeForInterval(from, interval)
 	toRounded := roundupTimeForInterval(to, interval)
-	openurl := createOpenUrl(fromRounded, toRounded, interval) // The URL
-	log.DefaultLogger.Info("edgeDnsOpenApiHealthCheck", "openurl", openurl)
+	/*openurl := createOpenUrl(fromRounded, toRounded, interval) // The URL
+	log.DefaultLogger.Info("edgeDnsOpenApiHealthCheck", "openurl", openurl)*/
+
+	openurl := createOpenUrl(fromRounded, toRounded, interval)
+	//openurl := fmt.Sprintf("https://%s%s", host, path)
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "fullUrl", openurl)
 
 	config := NewEdgegridConfig(clientSecret, host, accessToken, clientToken)
 
+	sess, err := session.New(
+		session.WithSigner(config),
+		session.WithHTTPTracing(true),
+	)
+	if err != nil {
+		log.DefaultLogger.Error("Error creating session", "err", err)
+		return err.Error(), backend.HealthStatusError
+	}
+
 	// Send HEAD request to the OPEN API
-	apireq, err := client.NewRequest(*config, "HEAD", openurl, nil)
+	req, err := http.NewRequest(http.MethodHead, openurl, nil)
 	if err != nil {
 		log.DefaultLogger.Error("Error creating HEAD request", "err", err)
 		return err.Error(), backend.HealthStatusError
 	}
-	apiresp, err := client.Do(*config, apireq)
+
+	resp, err := sess.Exec(req, nil) // no response body for HEAD
 	if err != nil {
 		log.DefaultLogger.Error("OPEN API communication error", "err", err)
 		return err.Error(), backend.HealthStatusError
 	}
+	defer resp.Body.Close()
 
-	log.DefaultLogger.Info("edgeDnsOpenApiHead", "Status", apiresp.Status)
+	log.DefaultLogger.Info("edgeDnsOpenApiHead", "Status", resp.Status)
 
 	// Error response. The datasource cannot reach the OPEN API.
-	if apiresp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		var rspDto OpenApiErrorRspDto
-		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
+		err := json.NewDecoder(resp.Body).Decode(&rspDto)
 		msg := "Datasource failed: "
-		if err != nil { // A JSON decode error. Not the expected body. Use the response status for the error message.
-			msg += apiresp.Status
-		} else {
-			msg += rspDto.Errors[0].Title // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
+		if err != nil {
+			msg += resp.Status
+		} else if len(rspDto.Errors) > 0 {
+			msg += rspDto.Errors[0].Title
 		}
 		log.DefaultLogger.Error("edgeDnsOpenApiTest", "msg", msg)
 		return msg, backend.HealthStatusError
@@ -245,9 +268,12 @@ func edgeDnsOpenApiHealthCheck(clientSecret string, host string, accessToken str
 // Get data needed to populate the graph.
 func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounded time.Time, interval Interval,
 	clientSecret string, host string, accessToken string, clientToken string) (*EdgeDnsTrafficByTimeRspDto, error) {
-	reqDto := NewEdgeDnsTrafficByTimeReqDto(zoneNamesList)     // the POST body
-	openurl := createOpenUrl(fromRounded, toRounded, interval) // the POST URL
-	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "openurl", openurl)
+	reqDto := NewEdgeDnsTrafficByTimeReqDto(zoneNamesList) // the POST body
+	/*openurl := createOpenUrl(fromRounded, toRounded, interval) // the POST URL
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "openurl", openurl)*/
+	openurl := createOpenUrl(fromRounded, toRounded, interval)
+	//openurl := fmt.Sprintf("https://%s%s", host, path)
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "fullUrl", openurl)
 
 	// POST to the OPEN API
 	postBodyJson, err := json.Marshal(reqDto)
@@ -256,35 +282,50 @@ func edgeDnsOpenApiQuery(zoneNamesList []string, fromRounded time.Time, toRounde
 		return nil, err
 	}
 	config := NewEdgegridConfig(clientSecret, host, accessToken, clientToken)
+	sess, err := session.New(
+		session.WithSigner(config),
+		//session.WithHTTPTracing(true),
+	)
+	if err != nil {
+		log.DefaultLogger.Error("Error creating session", "err", err)
+		return nil, err
+	}
 
-	apireq, err := client.NewRequest(*config, "POST", openurl, bytes.NewBuffer(postBodyJson))
+	req, err := http.NewRequest(http.MethodPost, openurl, bytes.NewBuffer(postBodyJson))
 	if err != nil {
 		log.DefaultLogger.Error("Error creating POST request", "err", err)
 		return nil, err
 	}
-	apiresp, err := client.Do(*config, apireq)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := sess.Exec(req, nil)
 	if err != nil {
 		log.DefaultLogger.Error("OPEN API communication error", "err", err)
 		return nil, err
 	}
-	defer apiresp.Body.Close()
-	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "Status", apiresp.Status)
+	defer resp.Body.Close()
+	log.DefaultLogger.Info("edgeDnsOpenApiQuery", "Status", resp.Status)
 
 	// OPEN API error response
-	if apiresp.StatusCode != 200 {
-		var rspDto OpenApiErrorRspDto // the expected "error" response body
-		err := json.NewDecoder(apiresp.Body).Decode(&rspDto)
-		if err != nil { // A JSON decode error. Not the expected body. Use the response status for the error message.
-			err = errors.New(apiresp.Status)
-		} else {
-			err = errors.New(rspDto.Errors[0].Title) // E.g. "Some of the requested objects are unauthorized: [foo.bar.com]"
+	if resp.StatusCode != http.StatusOK {
+		var rspDto OpenApiErrorRspDto
+		err := json.NewDecoder(resp.Body).Decode(&rspDto)
+		if err != nil {
+			return nil, errors.New(resp.Status)
 		}
-		log.DefaultLogger.Info("edgeDnsOpenApiQuery", "err", err)
-		return nil, err
+		if len(rspDto.Errors) > 0 {
+			return nil, errors.New(rspDto.Errors[0].Title)
+		}
+		return nil, errors.New("Unknown error")
 	}
 
 	// OPEN API normal response
-	var rspDto EdgeDnsTrafficByTimeRspDto // the POST response body
-	json.NewDecoder(apiresp.Body).Decode(&rspDto)
+	var rspDto EdgeDnsTrafficByTimeRspDto
+	err = json.NewDecoder(resp.Body).Decode(&rspDto)
+	if err != nil {
+		log.DefaultLogger.Error("Error decoding response JSON", "err", err)
+		return nil, err
+	}
+
 	return &rspDto, nil
 }

@@ -2,11 +2,11 @@
 
 Use the Akamai Edge DNS datasource plugin to observe Edge DNS metrics.
 
-## Install Grafana 7.0 or newer
+## Install Grafana 12.3.1 or newer
 
 [Install Grafana](https://grafana.com/docs/grafana/latest/installation/) details the process of installing Grafana on several operating systems.
 
-(Be sure to get version 7.0 or newer.  Your package manager may install an older version.  It's best to go to 
+(Be sure to get version 12.3.1 or newer.  Your package manager may install an older version.  It's best to go to 
 [Install Grafana](https://grafana.com/docs/grafana/latest/installation/) and follow the directions there.)
 
 ## Obtain Akamai API credentials
@@ -20,7 +20,7 @@ You need to create an "API Client" with authorization to use the
 See the "Get Started" section of [Reporting API v1](https://developer.akamai.com/api/core_features/reporting/v1.html) 
 which says, "To enable this API, choose the API service named reporting-api, and set the access level to READ-WRITE".
 
-Follow directions at [Authenticate With EdgeGrid](https://developer.akamai.com/getting-started/edgegrid) to generate 
+Follow directions at [Authenticate With EdgeGrid](https://techdocs.akamai.com/developer/docs/edgegrid) to generate 
 the required client credentials.
 
 A customized version of those directions follows:
@@ -44,16 +44,16 @@ A customized version of those directions follows:
   
 The credentials will later be entered into "Akamai Edge DNS Datasource" configuration.
 
-Note that Step 2 in [Authenticate With EdgeGrid](https://developer.akamai.com/getting-started/edgegrid) 
+Note that Step 2 in [Authenticate With EdgeGrid](https://techdocs.akamai.com/developer/docs/edgegrid) 
 "Decide which tool you’ll use to make requests" is not necessary. "Akamai Edge DNS Datasource" makes 
 the requests.
 
 ## Installing "Akamai Edge DNS Datasource" on a local Grafana
 
 * On the [edgedns-grafana-datasource-plugin](https://github.com/akamai/edgedns-grafana-datasource-plugin) GitHub repository, 
-under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v1.0.1".
+under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v2.0.0".
 
-* Copy "akamai-edgedns-datasource-1.0.1.zip" to your computer.  Unzip the archive.
+* Please download the source code as a ZIP file from the branch plugin-update on GitHub.
 
 ### Linux OSs (Debian, Ubuntu, CentOS, Fedora, OpenSuse, Red Hat)
 
@@ -66,7 +66,7 @@ Log directory: /var/log/grafana/
 * You may have to change permissons on the 'plugin' directory, for example: sudo chmod 777 /var/lib/grafana/plugins
 * Under the plugin directory (/var/lib/grafana/plugins), create a directory called 'edgedns-grafana-datasource'.
 
-From the unzipped archive, copy:
+From the dist folder of unzipped archive, copy:
 * LICENSE
 * README.md
 * img (directory and its contents)
@@ -77,14 +77,14 @@ From the unzipped archive, copy:
 
 to /var/lib/grafana/plugins/edgedns-grafana-datasource
 
-From the unzipped archive, copy one of (as appropriate for your hardware):
+From the dist folder of unzipped archive, copy one of (as appropriate for your hardware):
 * gpx_akamai-edgedns-datasource-plugin_linux_amd64
 * gpx_akamai-edgedns-datasource-plugin_linux_arm
 * gpx_akamai-edgedns-datasource-plugin_linux_arm64  
 
 to /var/lib/grafana/plugins/edgedns-grafana-datasource
 
-### Macintosh
+### macOS (Intel / x86_64)
 
 Configuration file: /usr/local/etc/grafana/grafana.ini  
 
@@ -93,7 +93,7 @@ Log directory: /usr/local/var/log/grafana/
 
 * Under the plugin directory (/usr/local/var/lib/grafana/plugins), create a directory called 'edgedns-grafana-datasource'.
 
-From the unzipped archive, copy:
+From the dist folder of unzipped archive, copy:
 * LICENSE
 * README.md
 * img (directory and its contents)
@@ -104,10 +104,32 @@ From the unzipped archive, copy:
 
 to /usr/local/var/lib/grafana/plugins/edgedns-grafana-datasource
 
-From the unzipped archive, copy:
+From the dist folder of unzipped archive, copy:
 * gpx_akamai-edgedns-datasource-plugin_darwin_amd64  
 
 to /usr/local/var/lib/grafana/plugins/edgedns-grafana-datasource
+
+### macOS (Apple Silicon / ARM64)
+Configuration file: /opt/homebrew/etc/grafana/grafana.ini
+
+Plugin directory: /opt/homebrew/var/lib/grafana/plugins
+Log directory: /opt/homebrew/var/log/grafana
+
+* Under the plugin directory (/opt/homebrew/var/lib/grafana/plugins), create a directory called 'edgedns-grafana-datasource'.
+
+From the dist folder of unzipped archive, copy:
+* LICENSE
+* README.md
+* img (directory and its contents)
+* module.js
+* module.js.LICENSE.txt
+* module.js.map
+* plugin.json  
+
+From the dist folder of unzipped archive, copy:
+* gpx_akamai-edgedns-datasource-plugin_darwin_arm64  
+
+to /opt/homebrew/var/lib/grafana/plugins/edgedns-grafana-datasource
 
 ### Windows
 
@@ -119,7 +141,7 @@ Log directory: install_dir\data\log
 
 * Under the plugin directory (install_dir\data\plugins), create a directory called 'edgedns-grafana-datasource'.
 
-From the unzipped archive, copy:
+From the dist folder of unzipped archive, copy:
 * LICENSE
 * README.md
 * img (directory and its contents)
@@ -130,7 +152,7 @@ From the unzipped archive, copy:
 
 to install_dir\data\plugins\edgedns-grafana-datasource 
 
-From the unzipped archive, copy:
+From the dist folder of unzipped archive, copy:
 * gpx_akamai-edgedns-datasource-plugin_windows_amd64.exe  
 
 to install_dir\data\plugins\edgedns-grafana-datasource
@@ -152,6 +174,8 @@ plugins = /var/lib/grafana/plugins
   NOTE: The plugin directory differs by operating system!
 
 * Under the [plugins] section header, uncomment "allow_loading_unsigned_plugins".
+
+  **NOTE:** This step is required because the Akamai EdgeDNS datasource plugin is not signed by Grafana.
 * To the right of "allow_loading_unsigned_plugins =", add "akamai-edgedns-datasource" (without quotes).  For example:
 ```
 [plugins]
@@ -171,7 +195,7 @@ t=2021-03-24T10:31:09-0400 lvl=info msg="Registering plugin" logger=plugins id=a
 [Troubleshooting](https://grafana.com/docs/grafana/latest/troubleshooting/) contains troubleshooting tips.
 
 ### Log in to Grafana
-[Getting started with Grafana](https://grafana.com/docs/grafana/latest/getting-started/getting-started/)
+[Getting started with Grafana](https://grafana.com/docs/grafana/latest/fundamentals/getting-started/)
 describes how to log in to Grafana.  The default username/password are: admin/admin.
 
 ## "Akamai Edge DNS Datasource" Configuration

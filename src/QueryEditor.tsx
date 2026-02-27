@@ -15,36 +15,50 @@
  */
 
 import defaults from 'lodash/defaults';
-
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { InlineField, LegacyForms, AsyncSelect } from '@grafana/ui';
+import { InlineField, Input, Combobox, ComboboxOption } from '@grafana/ui';
+
 import { DataSource } from './DataSource';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from './types';
-
-const { FormField } = LegacyForms;
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export class QueryEditor extends PureComponent<Props> {
-  getReports = () => {
+  // loadReports function returns options asynchronously for Combobox
+  getReports = async (input: string): Promise<ComboboxOption<string>[]> => {
     const uri = 'datasource/resource/openapireports';
-    return this.props.datasource.getResource(uri);
+    const results: SelectableValue<string>[] = await this.props.datasource.getResource(uri);
+
+    return results
+      .filter((item) => !input || item.label?.toLowerCase().includes(input.toLowerCase()))
+      .map((item) => ({ label: item.label!, value: item.value! }));
   };
 
-  onSelectReportsChange = (item: SelectableValue<string>) => {
+  onSelectReportsChange = (option: ComboboxOption<string> | null) => {
     const { onChange, query, onRunQuery } = this.props;
-    onChange({ ...query, selectedReport: item });
-    // console.log('selectedReport: ', item);
-    if (item && query.zoneNames) {
-      onRunQuery();
+
+    if (option) {
+      // Set the full SelectableValue for selectedReport
+      const selectedReport: SelectableValue<string> = {
+        label: option.label,
+        value: option.value,
+      };
+
+      onChange({ ...query, selectedReport });
+
+      if (query.zoneNames) {
+        onRunQuery();
+      }
+    } else {
+      // Option is null: user cleared selection, but since selectedReport is required, do nothing or keep old
     }
   };
 
   onZoneNamesChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, zoneNames: event.target.value });
-    // console.log('zoneNames: ' + event.target.value);
+
     if (event.target.value && query.selectedReport) {
       onRunQuery();
     }
@@ -53,7 +67,7 @@ export class QueryEditor extends PureComponent<Props> {
   onMetricNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, metricName: event.target.value });
-    // console.log('metricName: ' + event.target.value);
+
     if (query.zoneNames && query.selectedReport) {
       onRunQuery();
     }
@@ -67,31 +81,37 @@ export class QueryEditor extends PureComponent<Props> {
       <div className="gf-form">
         <div>
           <InlineField label="Report">
-            <AsyncSelect
-              loadOptions={this.getReports}
-              defaultOptions
-              value={selectedReport}
+            <Combobox<string>
               placeholder="Select a report"
+              options={this.getReports}
+              value={selectedReport?.value}
               onChange={this.onSelectReportsChange}
+              width="auto"
+              minWidth={25}
             />
           </InlineField>
-          <FormField
-            value={zoneNames || ''}
-            labelWidth={4}
-            inputWidth={24}
-            placeholder="Enter zone names"
-            onChange={this.onZoneNamesChange}
+
+          <InlineField
             label="Zones"
-            tooltip="Comma-separted zone names. Metrics for listed zones are added together."
-          />
-          <FormField
-            value={metricName || ''}
-            labelWidth={8}
-            inputWidth={20}
-            onChange={this.onMetricNameChange}
+            tooltip="Comma-separated zone names. Metrics for listed zones are added together."
+          >
+            <Input
+              value={zoneNames || ''}
+              onChange={this.onZoneNamesChange}
+              placeholder="Enter zone names"
+            />
+          </InlineField>
+
+          <InlineField
             label="Metric Name"
             tooltip="Graphed metric's name. If empty, a name is generated."
-          />
+          >
+            <Input
+              value={metricName || ''}
+              onChange={this.onMetricNameChange}
+              placeholder="Enter metric name"
+            />
+          </InlineField>
         </div>
       </div>
     );
