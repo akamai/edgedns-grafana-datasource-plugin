@@ -76,8 +76,7 @@
     "@grafana/schema": "^12.4.0",
     "@grafana/ui": "12.4.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-select": "^5.10.2"
+    "react-dom": "18.2.0"
   },
   "packageManager": "yarn@1.22.22"
 }
