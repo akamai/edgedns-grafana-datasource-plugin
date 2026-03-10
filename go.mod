@@ -1,15 +1,15 @@
 module github.com/akamai/edgedns-grafana-datasource-plugin
 
-go 1.25.5
+go 1.26.1
 
 require (
-	github.com/akamai/AkamaiOPEN-edgegrid-golang/v12 v12.3.0
 	github.com/grafana/grafana-plugin-sdk-go v0.286.0
 	github.com/magefile/mage v1.15.0
 )
 
 require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
+	github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.0.0
 	github.com/apache/arrow-go/v18 v18.5.0 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -70,12 +70,12 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace v0.64.0 // indirect
 	go.opentelemetry.io/contrib/propagators/jaeger v1.39.0 // indirect
 	go.opentelemetry.io/contrib/samplers/jaegerremote v0.33.0 // indirect
-	go.opentelemetry.io/otel v1.39.0 // indirect
+	go.opentelemetry.io/otel v1.40.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.39.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.39.0 // indirect
-	go.opentelemetry.io/otel/metric v1.39.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.39.0 // indirect
-	go.opentelemetry.io/otel/trace v1.39.0 // indirect
+	go.opentelemetry.io/otel/metric v1.40.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.40.0 // indirect
+	go.opentelemetry.io/otel/trace v1.40.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/ratelimit v0.3.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect

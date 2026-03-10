@@ -24,8 +24,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/edgegrid"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/session"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/edgegrid"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/session"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 )
@@ -33,7 +33,7 @@ import (
 // Edge DNS "authoritative-dns-traffic-by-time" OPEN API documentation
 // https://developer.akamai.com/api/core_features/reporting/authoritative-dns-traffic-by-time.html
 
-// Akamai OPEN EdgeGrid for GoLang v1
+// Akamai OPEN EdgeGrid for GoLang
 // https://github.com/akamai/AkamaiOPEN-edgegrid-golang/
 
 const EDGEDNS_URL_FORMAT = "/reporting-api/v1/reports/authoritative-dns-traffic-by-time/versions/3/report-data?start=%v&end=%v&interval=%v"
