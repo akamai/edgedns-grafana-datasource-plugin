@@ -2,11 +2,14 @@
 
 Use the Akamai Edge DNS datasource plugin to observe Edge DNS metrics.
 
-## Install Grafana 12.3.1 or newer
+**IMPORTANT**:
+***Documentation Visibility Notice*** > Because this is an unsigned plugin, this README and its setup instructions may not be visible within the Grafana Plugins Catalog depending on your version of Grafana. Please always refer to this GitHub repository for the most up-to-date installation and configuration steps.
+
+## Install Grafana 12.4.0 or newer
 
 [Install Grafana](https://grafana.com/docs/grafana/latest/installation/) details the process of installing Grafana on several operating systems.
 
-(Be sure to get version 12.3.1 or newer.  Your package manager may install an older version.  It's best to go to 
+(Be sure to get version 12.4.0 or newer.  Your package manager may install an older version.  It's best to go to 
 [Install Grafana](https://grafana.com/docs/grafana/latest/installation/) and follow the directions there.)
 
 ## Obtain Akamai API credentials
@@ -51,7 +54,7 @@ the requests.
 ## Installing "Akamai Edge DNS Datasource" on a local Grafana
 
 * On the [edgedns-grafana-datasource-plugin](https://github.com/akamai/edgedns-grafana-datasource-plugin) GitHub repository, 
-under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v2.0.0".
+under "Releases", select "Grafana datasource for Akamai Edge DNS metrics v2.0.1".
 
 * Please download the source code as a ZIP file from the branch plugin-update on GitHub.
 
