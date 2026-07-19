@@ -19,9 +19,10 @@ See these references:
 * [Build a data source plugin](https://grafana.com/tutorials/build-a-data-source-plugin/)
 
 ### First time build
-Run this command:
+This project uses Yarn 4 (managed by corepack). Enable corepack once, then install:
 ```
-yarn install --pure-lockfile
+corepack enable
+yarn install --immutable
 ```
 
 ### Build the back end
