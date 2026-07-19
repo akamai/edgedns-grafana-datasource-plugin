@@ -26,9 +26,9 @@ type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export class QueryEditor extends PureComponent<Props> {
   // loadReports function returns options asynchronously for Combobox
-  getReports = async (input: string): Promise<ComboboxOption<string>[]> => {
+  getReports = async (input: string): Promise<Array<ComboboxOption<string>>> => {
     const uri = 'datasource/resource/openapireports';
-    const results: SelectableValue<string>[] = await this.props.datasource.getResource(uri);
+    const results: Array<SelectableValue<string>> = await this.props.datasource.getResource(uri);
 
     return results
       .filter((item) => !input || item.label?.toLowerCase().includes(input.toLowerCase()))
