@@ -38,8 +38,8 @@ type selectableValueStr struct {
 // Label is displayed to the user in the query editor 'Reports' dropdown.
 // Value is of the form 'path/metric', where 'path' is part of the OPEN API URL and 'metric' is the metric to graph.
 var supportedReports = []selectableValueStr{
-	selectableValueStr{Label: "Edge DNS traffic by time: hits", Value: "authoritative-dns-traffic-by-time/hits"},
-	selectableValueStr{Label: "Edge DNS traffic by time: NXDOMAIN", Value: "authoritative-dns-traffic-by-time/nxdomain"},
+	{Label: "Edge DNS traffic by time: hits", Value: "authoritative-dns-traffic-by-time/hits"},
+	{Label: "Edge DNS traffic by time: NXDOMAIN", Value: "authoritative-dns-traffic-by-time/nxdomain"},
 }
 
 // The datasource front-end sends zonenames (to graph) as a comma-separated string. OPEN API POST request needs a zonename list.
@@ -135,7 +135,7 @@ func (td *AkamaiEdgeDnsDatasource) QueryData(ctx context.Context, req *backend.Q
 	return response, nil
 }
 
-func (td *AkamaiEdgeDnsDatasource) query(ctx context.Context, query backend.DataQuery, dss dataSourceSettingsJson) (*backend.DataResponse, error) {
+func (td *AkamaiEdgeDnsDatasource) query(_ context.Context, query backend.DataQuery, dss dataSourceSettingsJson) (*backend.DataResponse, error) {
 	response := &backend.DataResponse{}
 
 	var dqj dataQueryJson
