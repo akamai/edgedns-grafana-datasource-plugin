@@ -2,9 +2,6 @@
 
 Use the Akamai Edge DNS datasource plugin to observe Edge DNS metrics.
 
-**IMPORTANT**:
-***Documentation Visibility Notice*** > Because this is an unsigned plugin, this README and its setup instructions may not be visible within the Grafana Plugins Catalog depending on your version of Grafana. Please always refer to this GitHub repository for the most up-to-date installation and configuration steps.
-
 ## Install Grafana 13.1.0 or newer
 
 [Install Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/) details the process of installing Grafana on several operating systems.
