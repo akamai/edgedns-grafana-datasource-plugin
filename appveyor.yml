@@ -10,9 +10,9 @@ cache:
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
-  # install modules
-  - npm install -g yarn --quiet
-  - yarn install --pure-lockfile
+  # install modules (Yarn 4 is provided via corepack, pinned by the packageManager field)
+  - corepack enable
+  - yarn install --immutable
 
 # Post-install test scripts.
 test_script:
